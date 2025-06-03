@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de suivi alternance</title>
+    <style>
+        table, th, td { border: 1px solid black; border-collapse: collapse; }
+        th, td { padding: 8px; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Tableau de suivi de recherche d'alternance</h1>
+    <table>
+        <tr>
+            <th>Entreprise</th>
+            <th>URL</th>
+            <th>Sauvegarde locale</th>
+            <th>Date candidature</th>
+            <th>Retour</th>
+            <th>Date de retour</th>
+            <th>Commentaire</th>
+        </tr>
+        {% for ligne in tableau %}
+        <tr>
+            <td>{{ ligne[0] }}</td>
+            <td><a href="{{ ligne[1] }}" target="_blank">{{ ligne[1] }}</a></td>
+            <td>{{ ligne[2] }}</td>
+            <td>{{ ligne[3] }}</td>
+            <td>{{ ligne[4] }}</td>
+            <td>{{ ligne[5] }}</td>
+            <td>{{ ligne[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Ajouter une nouvelle entrée</h2>
+    <form method="post" action="/">
+        <label>Entreprise : <input type="text" name="entreprise" required></label><br>
+        <label>URL : <input type="url" name="url" required></label><br>
+        <label>Sauvegarde locale : <input type="text" name="sauvegarde_locale"></label><br>
+        <label>Date candidature (JJ/MM/AAAA) : <input type="text" name="date_candidature" required></label><br>
+        <label>Retour (oui/non/attente) : <input type="text" name="retour_oui_ou_non" required></label><br>
+        <label>Date de retour (JJ/MM/AAAA ou Néant) : <input type="text" name="date_de_retour"></label><br>
+        <label>Commentaire : <input type="text" name="commentaire"></label><br>
+        <button type="submit">Ajouter</button>
+    </form>
+</body>
+</html>
