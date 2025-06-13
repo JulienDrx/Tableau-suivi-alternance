@@ -1,0 +1,17 @@
+# .gitignore à la racine de ton projet
+
+# Ignorer environnements virtuels
+env/
+venv/
+
+# Ignorer fichiers compilés
+__pycache__/
+*.pyc
+
+# Ignorer les fichiers de config privés
+.env
+
+# Fichiers système
+.DS_Store
+_pycache__/
+*.pyc
