@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
+from pathlib import Path
+from Tableau_alternance import creer_table_si_absente, importer_csv_si_table_vide
+
+db_path = Path(__file__).resolve().parent / "BDD_alternance.db"
 
 app = Flask(__name__)
 
-DB_PATH = r"C:\Users\Julie\Desktop\fichier_db\BDD_alternance.db"
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -17,7 +21,7 @@ def index():
         date_de_retour = request.form['date_de_retour']
         commentaire = request.form['commentaire']
         # Insertion dans la base
-        con = sqlite3.connect(DB_PATH)
+        con = sqlite3.connect(str(db_path))
         cur = con.cursor()
         cur.execute('''INSERT INTO alternance (
             entreprise, url, sauvegarde_locale, date_candidature, retour_oui_ou_non, date_de_retour, commentaire)
@@ -27,7 +31,7 @@ def index():
         con.close()
         return redirect('/')
     # Affichage du tableau
-    con = sqlite3.connect(DB_PATH)
+    con = sqlite3.connect(str(db_path))
     cur = con.cursor()
     cur.execute("SELECT * FROM alternance")
     tableau = cur.fetchall()
@@ -35,4 +39,6 @@ def index():
     return render_template('tableau.html', tableau=tableau)
 
 if __name__ == '__main__':
+    creer_table_si_absente(db_path)
+    importer_csv_si_table_vide("données_de_base.csv", db_path)
     app.run(debug=True)

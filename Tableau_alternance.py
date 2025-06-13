@@ -2,9 +2,18 @@ import sqlite3
 import csv
 from curl_url import sauvegarder_page_web_curl
 import parse
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+db_path = BASE_DIR / "BDD_alternance.db"
+csv_file_path = BASE_DIR / "données_de_base.csv"
+curl_folder = BASE_DIR / "curl_url"
+curl_folder.mkdir(exist_ok=True)
+
+
 
 def creer_table_si_absente(db_path):
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect(str(db_path))
     cur = con.cursor()
     cur.execute("""
         CREATE TABLE IF NOT EXISTS alternance (
@@ -21,7 +30,7 @@ def creer_table_si_absente(db_path):
     con.close()
 
 def importer_csv_si_table_vide(csv_file_path, db_path):
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect(str(db_path))
     cur = con.cursor()
     cur.execute("SELECT COUNT(*) FROM alternance")
     nb = cur.fetchone()[0]
@@ -41,7 +50,7 @@ def importer_csv_si_table_vide(csv_file_path, db_path):
 def recuperer_url():
     url = input("Indiquez l'url de la page à sauvegarder : ")
     nom_fichier = input("Indiquez le nom du fichier de sauvegarde : ")
-    dossier = r"C:\Users\Julie\Desktop\curl_url"
+    dossier = str(curl_folder)
     chemin_local = sauvegarder_page_web_curl(url, dossier, nom_fichier)
     print("Page sauvegardée localement à :", chemin_local)
     return url, chemin_local
@@ -78,8 +87,7 @@ def demander_date_retour(retour_oui_non):
         return "Néant"
 
 def nouvelle_entree_tableau():
-    path= r"C:/Users/Julie/Desktop/fichier_db/BDD_alternance.db"
-    con = sqlite3.connect(path)
+    con = sqlite3.connect(str(db_path))
     cur = con.cursor()
     # La table existe déjà, pas besoin de la créer ici
     entreprise = input("Entrez le nom de l'entreprise : ")
@@ -98,8 +106,7 @@ def nouvelle_entree_tableau():
     Home()
 
 def afficher_table():
-    path= r"C:/Users/Julie/Desktop/fichier_db/BDD_alternance.db"
-    con = sqlite3.connect(path)
+    con = sqlite3.connect(str(db_path))
     cur = con.cursor()
     cur.execute("SELECT * FROM alternance")
     tableau = cur.fetchall()
@@ -128,12 +135,10 @@ def Home():
         print("Choix invalide, veuillez réessayer.")
         Home()
 
-# --- Initialisation au lancement ---
-csv_file_path = r"C:\Users\Julie\Desktop\python\projet_perso\Tableau de suivi recherche alternance\données_de_base.csv"
-db_path = r"C:\Users\Julie\Desktop\fichier_db\BDD_alternance.db"
 
-creer_table_si_absente(db_path)
-importer_csv_si_table_vide(csv_file_path, db_path)
-Home()
+if __name__ == "__main__":
+    creer_table_si_absente(str(db_path))
+    importer_csv_si_table_vide(str(csv_file_path), str(db_path))
+    Home()
 
 
