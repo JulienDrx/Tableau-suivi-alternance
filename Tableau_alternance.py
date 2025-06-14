@@ -17,6 +17,7 @@ def creer_table_si_absente(db_path):
     cur = con.cursor()
     cur.execute("""
         CREATE TABLE IF NOT EXISTS alternance (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             entreprise TEXT,
             url TEXT,
             sauvegarde_locale TEXT,

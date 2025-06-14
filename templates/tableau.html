@@ -20,18 +20,21 @@
             <th>Retour</th>
             <th>Date de retour</th>
             <th>Commentaire</th>
+            <th>Actions</th>
         </tr>
-        {% for ligne in tableau %}
-        <tr>
-            <td>{{ ligne[0] }}</td>
-            <td><a href="{{ ligne[1] }}" target="_blank">{{ ligne[1] }}</a></td>
-            <td>{{ ligne[2] }}</td>
-            <td>{{ ligne[3] }}</td>
-            <td>{{ ligne[4] }}</td>
-            <td>{{ ligne[5] }}</td>
-            <td>{{ ligne[6] }}</td>
-        </tr>
-        {% endfor %}
+            {% for ligne in tableau %}
+            <tr>
+                    <td>{{ ligne[1] }}</td> <!-- entreprise -->
+                    <td><a href="{{ ligne[2] }}" target="_blank">{{ ligne[2] }}</a></td> <!-- url -->
+                    <td>{{ ligne[3] }}</td> <!-- sauvegarde locale -->
+                    <td>{{ ligne[4] }}</td> <!-- date candidature -->
+                    <td>{{ ligne[5] }}</td> <!-- retour -->
+                    <td>{{ ligne[6] }}</td> <!-- date de retour -->
+                    <td>{{ ligne[7] }}</td> <!-- commentaire -->
+                    <td><a href="/modifier/{{ ligne[0] }}">Modifier</a></td> <!-- bouton -->
+                </tr>
+                {% endfor %}
+
     </table>
 
     <h2>Ajouter une nouvelle entrée</h2>

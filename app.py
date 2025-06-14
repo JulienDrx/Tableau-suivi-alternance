@@ -40,6 +40,38 @@ def index():
     con.close()
     return render_template('tableau.html', tableau=tableau)
 
+
+
+
+@app.route('/modifier/<int:id>', methods=['GET', 'POST'])
+def modifier(id):
+    con = sqlite3.connect(str(db_path))
+    cur = con.cursor()
+    if request.method == 'POST':
+        entreprise = request.form['entreprise']
+        url = request.form['url']
+        nom_fichier = request.form['nom_fichier']
+        sauvegarde_locale = sauvegarder_page_web_curl(url, str(Path("pages_enregistrées")), nom_fichier)
+        date_candidature = request.form['date_candidature']
+        retour_oui_ou_non = request.form['retour_oui_ou_non']
+        date_de_retour = request.form['date_de_retour']
+        commentaire = request.form['commentaire']
+
+        cur.execute('''UPDATE alternance SET 
+            entreprise=?, url=?, sauvegarde_locale=?, date_candidature=?, 
+            retour_oui_ou_non=?, date_de_retour=?, commentaire=?
+            WHERE id=?''',
+            (entreprise, url, sauvegarde_locale, date_candidature, 
+             retour_oui_ou_non, date_de_retour, commentaire, id))
+        con.commit()
+        con.close()
+        return redirect('/')
+    else:
+        cur.execute("SELECT * FROM alternance WHERE id=?", (id,))
+        ligne = cur.fetchone()
+        con.close()
+        return render_template('modifier.html', ligne=ligne)
+
 if __name__ == '__main__':
     creer_table_si_absente(db_path)
     importer_csv_si_table_vide("données_de_base.csv", db_path)
