@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 import sqlite3
 from pathlib import Path
 from Tableau_alternance import creer_table_si_absente, importer_csv_si_table_vide
+from curl_url import sauvegarder_page_web_curl
 
 db_path = Path(__file__).resolve().parent / "BDD_alternance.db"
 
@@ -15,7 +16,8 @@ def index():
         # Récupération des données du formulaire
         entreprise = request.form['entreprise']
         url = request.form['url']
-        sauvegarde_locale = request.form['sauvegarde_locale']
+        nom_fichier = request.form['nom_fichier']
+        sauvegarde_locale = sauvegarder_page_web_curl(url, str(Path("pages_enregistrées")), nom_fichier)
         date_candidature = request.form['date_candidature']
         retour_oui_ou_non = request.form['retour_oui_ou_non']
         date_de_retour = request.form['date_de_retour']
