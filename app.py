@@ -94,7 +94,7 @@ _browser_lock = threading.Lock()
 def open_browser():
     global _browser_opened
     print("attente ouverture navigateur")
-    time.sleep(3)
+    time.sleep(1)
     with _browser_lock:
             if not _browser_opened:
                 print("Ouverture du navigateur")

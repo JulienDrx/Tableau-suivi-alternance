@@ -16,7 +16,8 @@ __pycache__/
 _pycache__/
 *.pyc
 
-BDD_alternance.db
+BDD_alternance.db/
+données_de_base.csv/
 
 pages_enregistrées/
 curl_url/
