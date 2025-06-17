@@ -11,15 +11,17 @@ __pycache__/
 # Ignorer les fichiers de config privés
 .env
 
-# Fichiers système
+# Ignorer fichiers système
 .DS_Store
-_pycache__/
-*.pyc
 
-BDD_alternance.db/
-données_de_base.csv/
+# Ignorer la base de données et les fichiers CSV
+BDD_alternance.db
+données_de_base.csv
 
+# Ignorer les pages enregistrées et autres fichiers temporaires
 pages_enregistrées/
 curl_url/
-scripts activate.txt/
-roadmap.txt/
+roadmap.txt
+
+# Ignorer les fichiers temporaires générés par l'application
+tempfile/
