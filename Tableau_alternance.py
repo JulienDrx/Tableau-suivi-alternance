@@ -30,23 +30,23 @@ def creer_table_si_absente(db_path):
     con.commit()
     con.close()
 
-def importer_csv_si_table_vide(csv_file_path, db_path):
-    con = sqlite3.connect(str(db_path))
-    cur = con.cursor()
-    cur.execute("SELECT COUNT(*) FROM alternance")
-    nb = cur.fetchone()[0]
-    if nb == 0:
-        with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                cur.execute('''INSERT INTO alternance
-                    (entreprise, url, sauvegarde_locale, date_candidature, retour_oui_ou_non, date_de_retour, commentaire)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                    (row['entreprise'], row['url'], row['sauvegarde_locale'], row['date_candidature'],
-                     row['retour_oui_ou_non'], row['date_de_retour'], row['commentaire']))
-        con.commit()
-        print("Base de donnée initialisée avec le CSV.")
-    con.close()
+#def importer_csv_si_table_vide(csv_file_path, db_path):
+    #con = sqlite3.connect(str(db_path))
+    #cur = con.cursor()
+    #cur.execute("SELECT COUNT(*) FROM alternance")
+    #nb = cur.fetchone()[0]
+    #if nb == 0:
+        #with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
+            #reader = csv.DictReader(csvfile)
+            #for row in reader:
+                #cur.execute('''INSERT INTO alternance
+                    #(entreprise, url, sauvegarde_locale, date_candidature, retour_oui_ou_non, date_de_retour, commentaire)
+                    #VALUES (?, ?, ?, ?, ?, ?, ?)''',
+                    #(row['entreprise'], row['url'], row['sauvegarde_locale'], row['date_candidature'],
+                     #row['retour_oui_ou_non'], row['date_de_retour'], row['commentaire']))
+        #con.commit()
+        #print("Base de donnée initialisée avec le CSV.")
+    #con.close()
 
 def recuperer_url():
     url = input("Indiquez l'url de la page à sauvegarder : ")

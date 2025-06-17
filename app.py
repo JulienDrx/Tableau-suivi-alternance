@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
 from pathlib import Path
-from Tableau_alternance import creer_table_si_absente, importer_csv_si_table_vide
+from Tableau_alternance import creer_table_si_absente
 from curl_url import sauvegarder_page_web_curl
 import webbrowser
 import threading
@@ -115,7 +115,7 @@ def run_app():
 
 if __name__ == '__main__':
     creer_table_si_absente(db_path)
-    importer_csv_si_table_vide("données_de_base.csv", db_path)
+    
 
     threading.Thread(target=run_app).start()
     open_browser()

@@ -25,3 +25,8 @@ roadmap.txt
 
 # Ignorer les fichiers temporaires générés par l'application
 tempfile/
+
+# PyInstaller output
+build/
+dist/
+*.spec
