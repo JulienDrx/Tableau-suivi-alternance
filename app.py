@@ -9,25 +9,55 @@ import sys
 import time
 import os
 import tempfile
+import tkinter as tk
+from tkinter import filedialog
+
+# === Demander le chemin de la base uniquement au premier lancement ===
+
+CONFIG_FILE =Path("db_config.txt")
+
+def demande_chemin_bdd():
+    root = tk.Tk()
+    root.withdraw()
+    fichier = filedialog.asksaveasfilename(
+        title="Où souhaitez-vous enregistrer la base de données ?",
+        defaultextension=".db",
+        filetypes=[("Base SQL", "*.db")],
+        initialfile="BDD_alternance.db"
+    )
+    return Path(fichier) if fichier else None
+
+if CONFIG_FILE.exists():
+    chemin_str = CONFIG_FILE.read_text(encoding ="utf-8").strip()
+    db_path = Path(chemin_str)
+    if not db_path.exists():
+        print(f"Le fichier de base de données {db_path} n'existe pas. Veuillez le recréer.")
+        db_path = None
+else : 
+    db_path = None
+
+if not db_path:
+    chemin = demande_chemin_bdd()
+    if not chemin:
+        print("Aucun fichier sélectionné. Fermeture")
+        exit() 
+
+    chemin.parent.mkdir(parents=True, exist_ok=True)
+    CONFIG_FILE.write_text(str(chemin), encoding="utf-8")
+    db_path = chemin
 
 
-if getattr(sys, 'frozen', False):
-    base_path = Path(sys._MEIPASS)
-else:
-    base_path = Path(__file__).parent.resolve()
 
-db_path = base_path / "BDD_alternance.db"
-template_folder = base_path / "templates"
 
+
+
+# === Lancer l'app Flask ===
+template_folder = Path(__file__).parent / "templates"
 app = Flask(__name__, template_folder=str(template_folder))
-
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    
     if request.method == 'POST':
-        # Récupération des données du formulaire
         entreprise = request.form['entreprise']
         url = request.form['url']
         nom_fichier = request.form['nom_fichier']
@@ -36,7 +66,7 @@ def index():
         retour_oui_ou_non = request.form['retour_oui_ou_non']
         date_de_retour = request.form['date_de_retour']
         commentaire = request.form['commentaire']
-        # Insertion dans la base
+
         con = sqlite3.connect(str(db_path))
         cur = con.cursor()
         cur.execute('''INSERT INTO alternance (
@@ -46,16 +76,13 @@ def index():
         con.commit()
         con.close()
         return redirect('/')
-    # Affichage du tableau
+
     con = sqlite3.connect(str(db_path))
     cur = con.cursor()
     cur.execute("SELECT * FROM alternance")
     tableau = cur.fetchall()
     con.close()
     return render_template('tableau.html', tableau=tableau)
-
-
-
 
 @app.route('/modifier/<int:id>', methods=['GET', 'POST'])
 def modifier(id):
@@ -86,39 +113,29 @@ def modifier(id):
         con.close()
         return render_template('modifier.html', ligne=ligne)
 
-
-
 _browser_opened = False
 _browser_lock = threading.Lock()
 
+# === Lancement automatique ===
 def open_browser():
     global _browser_opened
     print("attente ouverture navigateur")
     time.sleep(1)
     with _browser_lock:
-            if not _browser_opened:
-                print("Ouverture du navigateur")
-                webbrowser.open_new("http://127.0.0.1:5000")
-                _browser_opened = True
-            else:
-                print("Navigateur déjà ouvert, pas besoin de le rouvrir.")
-
-
-
-
+        if not _browser_opened:
+            print("Ouverture du navigateur")
+            webbrowser.open_new("http://127.0.0.1:5000")
+            _browser_opened = True
+        else:
+            print("Navigateur déjà ouvert, pas besoin de le rouvrir.")
 
 def run_app():
     print("Lancement de l'application Flask")
-    app.run(debug=False,use_reloader = False)
-    
-
+    app.run(debug=False, use_reloader=False)
 
 if __name__ == '__main__':
     creer_table_si_absente(db_path)
-    
-
     threading.Thread(target=run_app).start()
     open_browser()
-
     while True:
         time.sleep(1)

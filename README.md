@@ -1,17 +1,19 @@
 # 📊 Tableau de suivi de recherche d'alternance
 
-Ce projet est une application web (et console) qui permet de suivre facilement ses candidatures à des offres d'alternance. Il utilise **Flask**, une base de données **SQLite** et un fichier CSV de démarrage.
+Ce projet est une application **web** (et **console**) permettant de suivre efficacement tes candidatures à des offres d'alternance.  
+Elle s'appuie sur **Flask**, **SQLite**, et enregistre localement une copie des pages via `curl`.
 
 ---
 
 ## 🚀 Fonctionnalités
 
-- Ajout d'une candidature via formulaire web 📝
-- Affichage de toutes les candidatures dans un tableau 📋
-- Stockage des données dans une base SQLite locale 💾
-- Pré-remplissage initial depuis un fichier CSV
-- Sauvegarde d'une copie locale de l'offre (via `curl_url.py`)
-- Interface console disponible également
+- ✅ Ajout de candidatures via formulaire web
+- 📋 Affichage dans un tableau web interactif
+- 💾 Base de données SQLite **persistante et personnalisée**
+- 📂 Emplacement de la base mémorisé automatiquement (`db_config.txt`)
+- 🌐 Sauvegarde automatique des pages d'offres (via `curl`)
+- 🧱 Application compilable en `.exe` avec PyInstaller
+- 🖥️ Interface console en option
 
 ---
 
@@ -20,8 +22,9 @@ Ce projet est une application web (et console) qui permet de suivre facilement s
 - Python 3
 - Flask
 - SQLite3
-- HTML (Jinja2 Template)
-- CSV
+- HTML (Jinja2)
+- `curl` via subprocess
+- `tkinter` pour la sélection de fichiers
 
 ---
 
@@ -29,100 +32,56 @@ Ce projet est une application web (et console) qui permet de suivre facilement s
 
 ```
 Tableau-suivi-alternance/
-├── app.py                      # Application web Flask
-├── Tableau_alternance.py       # Interface console + logique DB/CSV
-├── curl_url.py                 # Téléchargement de pages web
-├── données_de_base.csv         # Données de base à importer
-├── requirements.txt            # Dépendances
-├── templates/
-│   └── tableau.html            # Template HTML principal
-└── BDD_alternance.db           # Base de données générée
+├── app.py                  # Application web Flask
+├── Tableau_alternance.py   # Interface console & logique DB
+├── curl_url.py             # Sauvegarde de pages HTML (curl)
+├── templates/              # HTML (Flask)
+├── static/                 # CSS
+├── .gitignore              # Fichiers ignorés par Git
+├── db_config.txt           # 📌 Chemin de la base (non suivi par Git)
+├── build.bat               # Script pour recompiler l'application
+└── README.md               # Documentation
 ```
 
 ---
 
-## ▶️ Lancer l'application
+## 🗃️ Système de base de données persistante
 
-### 1. Cloner le projet
+Lors du premier lancement, l'application vous demandera **où enregistrer la base SQLite**.  
+Ce chemin est mémorisé dans un fichier `db_config.txt`, et **réutilisé automatiquement à chaque lancement**.
+
+> Si vous supprimez ce fichier, l'application vous redemandera le chemin.
+
+---
+
+## ▶️ Lancer l'application Web
 
 ```bash
 git clone https://github.com/JulienDrx/Tableau-suivi-alternance.git
 cd Tableau-suivi-alternance
-```
 
-### 2. Installer l'environnement
-
-```bash
 python -m venv env
-env\Scripts\activate      # Sous Windows
-# ou
-source env/bin/activate   # Sous macOS/Linux
-
+env\Scripts\activate
 pip install -r requirements.txt
-```
 
-### 3. Lancer le serveur Flask
-
-```bash
 python app.py
 ```
 
-👉 Puis ouvrir : [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
 ---
 
-## 💻 Interface console (optionnelle)
+## 🧱 Compiler en .exe
 
 ```bash
-python Tableau_alternance.py
+pyinstaller --onefile --console ^
+--add-data "templates;templates" ^
+--add-data "static;static" ^
+app.py
 ```
 
----
-
-## 📜 Licence
-
-Ce projet est distribué sous licence **MIT** — libre d’utilisation, de modification et de distribution.
+Le `.exe` sera généré dans `dist/app.exe`
 
 ---
 
-## ✨ Contributeur
+## 🙋 Auteur
 
 - [JulienDrx](https://github.com/JulienDrx)
-
----
-
-# 🇬🇧 English — Internship Application Tracker
-
-This is a bilingual web/console app for tracking internship/job applications. Built with Flask and SQLite, it helps manage your search efficiently.
-
-### ✅ Features
-
-- Add new applications via a form
-- Display them in a clean HTML table
-- Save locally in SQLite
-- Auto-import data from CSV
-- Console version also available
-
-### 📦 Tech Stack
-
-- Python 3
-- Flask + Jinja2
-- SQLite3
-- CSV
-
-### 🏁 Getting Started
-
-```bash
-git clone https://github.com/JulienDrx/Tableau-suivi-alternance.git
-cd Tableau-suivi-alternance
-python -m venv env
-source env/bin/activate      # or env\Scripts\activate on Windows
-pip install -r requirements.txt
-python app.py
-```
-
-Then visit [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
----
-
-Enjoy using this tool, and good luck with your internship search!

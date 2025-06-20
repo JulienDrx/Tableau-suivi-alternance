@@ -30,3 +30,9 @@ tempfile/
 build/
 dist/
 *.spec
+
+# Ignorer fichier txt emplacement bdd
+db_config.txt
+
+# Ignorer compilateur automatique
+build.bat
